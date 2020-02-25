@@ -1,6 +1,7 @@
 #include "soaprequest.h"
 #include <QDateTime>
 #include <QEventLoop>
+#include <QTimer>
 
 SoapRequest::SoapRequest() : QObject (nullptr)
 {
@@ -24,15 +25,33 @@ bool SoapRequest::sendRequest()
 
     qInfo() << "[SoapRequest] Request onvif " << this->createRequest();
     QNetworkReply * reply = this->networkManager->post(request, this->createRequest().toUtf8());
+    QTimer timerTimeout;
+    timerTimeout.setSingleShot(true);
     QEventLoop loop;
+    loop.connect(&timerTimeout, SIGNAL(timeout()), SLOT(quit()));
     loop.connect(networkManager, SIGNAL(finished(QNetworkReply*)), SLOT(quit()));
+
+    timerTimeout.start(3000);
     loop.exec();
-    QVariant statusCodeV = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
-    qInfo() << "[SoapRequest] Response Onvif" << QString(reply->readAll());
-    if (statusCodeV.toInt() != 200) {
-        return false;
+
+    if (timerTimeout.isActive()) {
+        timerTimeout.stop();
+        if(reply->error() > 0) {
+            qInfo() << "[SoapRequest] Request error " << reply->error();
+        }
+        else {
+            QVariant statusCodeV = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+            qInfo() << "[SoapRequest] Response Onvif" << QString(reply->readAll());
+            if (statusCodeV.toInt() == 200) {
+                return true;
+            }
+        }
+    } else {
+       disconnect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+       reply->abort();
+       qInfo() << "[SoapRequest] Request timeout";
     }
-    return true;
+    return false;
 }
 
 QString SoapRequest::createRequest()
