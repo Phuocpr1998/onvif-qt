@@ -43,10 +43,3 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-#DEPENDPATH += $$PWD/OnvifPTZLib/onvif
-#INCLUDEPATH += $$PWD/OnvifPTZLib/onvif
-#LIBS +=  -L$$PWD/libsOnvif -lOnvifPTZLib
-
-#SUBDIRS += OnvifPTZLib/OnvifPTZLib.pro
-
-
