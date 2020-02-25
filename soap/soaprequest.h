@@ -13,7 +13,7 @@ public:
     SoapRequest();
     ~SoapRequest();
 
-    bool sendRequest();
+    bool sendRequest(QString &result);
 public:
     QString username, password, xAddress;
     QString body, action;

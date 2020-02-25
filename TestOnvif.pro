@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets network core
 
@@ -25,13 +25,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        deviceonvif/onvifdeviceservice.cpp \
         main.cpp \
         mainwindow.cpp \
+        mediaonvif/onvifmediaservice.cpp \
         ptzonvif/onvifptzservice.cpp \
         soap/soaprequest.cpp
 
 HEADERS += \
+        deviceonvif/onvifdeviceservice.h \
         mainwindow.h \
+        mediaonvif/onvifmediaservice.h \
+        onvifmodels/models.h \
         ptzonvif/onvifptzservice.h \
         soap/soaprequest.h
 

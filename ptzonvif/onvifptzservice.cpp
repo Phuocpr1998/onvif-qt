@@ -26,7 +26,9 @@ bool OnvifPTZService::ContinuousMove(QString ptzXAddress, QString username, QStr
     body.push_back("<Zoom xmlns=\"http://www.onvif.org/ver10/schema\" x=\"" + QString::number(z) + "\"/>");
     body.push_back("</Velocity></ContinuousMove>");
     soapRequest->body = body;
-    bool result = soapRequest->sendRequest();
+    QString response;
+    bool result = soapRequest->sendRequest(response);
+    qInfo() << "[OnvifPTZService] ContinuousMove Response " << response;
     delete soapRequest;
     return result;
 }
@@ -46,7 +48,9 @@ bool OnvifPTZService::Stop(QString ptzXAddress, QString username, QString passwo
     body.push_back("<PanTilt>true</PanTilt><Zoom>true</Zoom>");
     body.push_back("</Stop>");
     soapRequest->body = body;
-    bool result = soapRequest->sendRequest();
+    QString response;
+    bool result = soapRequest->sendRequest(response);
+    qInfo() << "[OnvifPTZService] ContinuousMove Response " << response;
     delete soapRequest;
     return result;
 }

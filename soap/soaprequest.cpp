@@ -13,7 +13,7 @@ SoapRequest::~SoapRequest()
     delete networkManager;
 }
 
-bool SoapRequest::sendRequest()
+bool SoapRequest::sendRequest(QString &result)
 {
     QNetworkRequest request(this->xAddress);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/soap+xml");
@@ -41,7 +41,7 @@ bool SoapRequest::sendRequest()
         }
         else {
             QVariant statusCodeV = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
-            qInfo() << "[SoapRequest] Response Onvif" << QString(reply->readAll());
+            result = QString(reply->readAll());
             if (statusCodeV.toInt() == 200) {
                 return true;
             }
