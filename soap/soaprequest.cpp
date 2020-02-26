@@ -24,12 +24,16 @@ bool SoapRequest::sendRequest(QString &result)
     request.setRawHeader("Authorization", headerData.toLocal8Bit());
 
     qInfo() << "[SoapRequest] Request onvif " << this->createRequest();
+
+    //for digest authenticaton request
+    QObject::connect(this->networkManager, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this, SLOT(authRequired(QNetworkReply *, QAuthenticator *)));
     QNetworkReply * reply = this->networkManager->post(request, this->createRequest().toUtf8());
+
     QTimer timerTimeout;
     timerTimeout.setSingleShot(true);
     QEventLoop loop;
     loop.connect(&timerTimeout, SIGNAL(timeout()), SLOT(quit()));
-    loop.connect(networkManager, SIGNAL(finished(QNetworkReply*)), SLOT(quit()));
+    loop.connect(this->networkManager, SIGNAL(finished(QNetworkReply*)), SLOT(quit()));
 
     timerTimeout.start(3000);
     loop.exec();
@@ -52,6 +56,12 @@ bool SoapRequest::sendRequest(QString &result)
        qInfo() << "[SoapRequest] Request timeout";
     }
     return false;
+}
+
+void SoapRequest::authRequired(QNetworkReply *, QAuthenticator *authenticator)
+{
+    authenticator->setUser(this->username);
+    authenticator->setPassword(this->password);
 }
 
 QString SoapRequest::createRequest()

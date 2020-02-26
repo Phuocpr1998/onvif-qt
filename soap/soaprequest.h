@@ -5,6 +5,7 @@
 #include <QNetworkReply>
 #include <QObject>
 #include <QUuid>
+#include <QAuthenticator>
 
 class SoapRequest : QObject
 {
@@ -14,6 +15,8 @@ public:
     ~SoapRequest();
 
     bool sendRequest(QString &result);
+public slots:
+    void authRequired(QNetworkReply *reply, QAuthenticator *authenticator);
 public:
     QString username, password, xAddress;
     QString body, action;
