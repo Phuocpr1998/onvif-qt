@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     OnvifDeviceService a;
-    DeviceCapabilities deviceCapabilities = a.GetCapabilities("http://192.168.0.11/onvif/Media", "admin", "Admin123");
+    DeviceCapabilities deviceCapabilities = a.GetCapabilities("http://192.168.0.11/onvif/device_service", "admin", "Admin123");
 
     OnvifMediaService b;
     QList<MediaProfile> listProfile = b.GetProfiles(deviceCapabilities.mediaXAddr, "admin", "Admin123");
