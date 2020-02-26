@@ -22,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent) :
     c.ContinuousMove(deviceCapabilities.ptzXAddr, "admin", "Admin123", listProfile[0].token, 0.2, 0, 0);
     QThread::msleep(2000);
     c.Stop(deviceCapabilities.ptzXAddr, "admin", "Admin123", listProfile[0].token);
+    QThread::msleep(500);
+    c.GoToHomePosition(deviceCapabilities.ptzXAddr, "admin", "Admin123", listProfile[0].token);
 }
 
 MainWindow::~MainWindow()

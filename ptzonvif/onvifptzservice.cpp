@@ -50,7 +50,55 @@ bool OnvifPTZService::Stop(QString ptzXAddress, QString username, QString passwo
     soapRequest->body = body;
     QString response;
     bool result = soapRequest->sendRequest(response);
-    qInfo() << "[OnvifPTZService] ContinuousMove Response " << response;
+    qInfo() << "[OnvifPTZService] Stop Response " << response;
     delete soapRequest;
     return result;
 }
+
+bool OnvifPTZService::GoToHomePosition(QString ptzXAddress, QString username, QString password, QString profile)
+{
+    SoapRequest *soapRequest = new SoapRequest();
+    soapRequest->xAddress = ptzXAddress;
+    soapRequest->username = username;
+    soapRequest->password = password;
+    soapRequest->action = "http://www.onvif.org/ver20/ptz/wsdl/GotoHomePosition";
+    soapRequest->XMLNs = this->ptzNameSpace;
+    QString body("<GotoHomePosition xmlns=\"http://www.onvif.org/ver20/ptz/wsdl\">");
+    body.push_back("<ProfileToken>");
+    body.push_back(profile);
+    body.push_back("</ProfileToken>");
+    body.push_back("</GotoHomePosition>");
+    soapRequest->body = body;
+    QString response;
+    bool result = soapRequest->sendRequest(response);
+    qInfo() << "[OnvifPTZService] GoToHomePosition Response " << response;
+    delete soapRequest;
+    return result;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
